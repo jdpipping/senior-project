@@ -5,6 +5,12 @@ library(tidyverse)
 # load dataset
 data <- read_csv('final-data.csv')
 
+# split covariates, outcome
+covariates <- data |> 
+  select(-fips, - state, -county, -avg_days_mentally_unhealthy)
+outcome <- data |> 
+  select(avg_days_mentally_unhealthy)
+
 # identify principal components
 components <- prcomp(covariates, scale = TRUE)
 
@@ -17,15 +23,27 @@ pls <- plsr(avg_days_mentally_unhealthy ~., data = data |> select(-fips, -state,
 
 # validation plot
 validationplot(pls, val.type = 'RMSEP',
-               main = "PLS Validation Plot")
+               main = "PLS Validation Plot",
+               xlab = "Number of Components")
 
 # elbow criterion for number of components: threshold 0.001
 rmsep <- RMSEP(pls)
-rmsep
+# rmsep
 nComp <- 11
 
 # fit final model
 final_model <- plsr(avg_days_mentally_unhealthy ~., data = data |> select(-fips, -state, -county), ncomp = nComp, scale = TRUE, validation = 'CV')
+
+# get loadings for components
+final_loadings <- loadings(final_model)
+
+# variable importance in projection
+vip_scores <- as.matrix(varImp(final_model))
+
+sorted_vip_scores <- as.data.frame(vip_scores[order(vip_scores, decreasing = TRUE),])
+colnames(sorted_vip_scores) <- "VIP Scores"
+
+sorted_vip_scores
 
 # get model coefficients
 final_coefficients <- final_model$coefficients[,1,]
