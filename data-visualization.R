@@ -1,19 +1,11 @@
 # load libraries
-library(tidyverse)
 library(corrplot)
+library(tidyverse)
 
 # load dataset
 data <- read_csv('final-data.csv')
 
-# motivation for pls ####
-
-# correlation matrix
-correlation_matrix <- cor(data |> select(-fips, -state, -county, -avg_days_mentally_unhealthy))
-
-# correlation plot
-corrplot(correlation_matrix, method = "color", tl.pos = 'n')
-
-# post-modeling visualization ####
+# variable validation ####
 
 # household income / mental health
 data |> 
@@ -26,6 +18,16 @@ data |>
        x = 'Median Household Income ($)') +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+
+# motivation for pls ####
+
+# correlation matrix
+correlation_matrix <- cor(data |> select(-fips, -state, -county, -avg_days_mentally_unhealthy))
+
+# correlation plot
+corrplot(correlation_matrix, method = "color", tl.pos = 'n')
+
+# post-modeling visualization ####
 
 # physical / mental health
 data |> 
