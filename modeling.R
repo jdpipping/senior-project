@@ -74,7 +74,7 @@ ols_residual_plot = ols_fitted |>
 # calculate vif
 vif = vif(ols_fit)
 # compile results in table
-vif_table = tibble(variables = names(vif), vif = vif) |> 
+vif_table = tibble(Variables = names(vif), VIF = vif) |> 
   arrange(desc(vif))
 
 # ols coefficient plot
