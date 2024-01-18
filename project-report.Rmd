@@ -32,9 +32,9 @@ set.seed(2023)
 
 # Introduction
 
-Few would argue that mental health represents an undeniable concern in the United States. The U.S. Substance Abuse and Mental Health Services Administration (SAMHSA) estimates that over one in five adults (59.3 million) live with a mental illness. Furthermore, an estimated 45.3% of these individuals receive treatment, leaving approximately 29 million Americans without care [@samhsa]. In response to these staggering numbers, the U.S. Congress passed the Bipartisan Safer Communities Act (BSCA) in 2022, which included \$250 million in supplemental funding to help states and territories address the mental health challenges facing their communities [@usdhhs].
+Few would argue that mental health represents an undeniable concern in the United States. The U.S. Substance Abuse and Mental Health Services Administration (SAMHSA) estimates that over one in five adults (59.3 million) live with a mental illness. Furthermore, an estimated 45.3% of these individuals receive treatment, leaving approximately 30 million Americans without care [@samhsa]. In response to these staggering numbers, the U.S. Congress passed the Bipartisan Safer Communities Act (BSCA) in 2022, which included \$250 million in supplemental funding to help states and territories address the mental health challenges facing their communities [@usdhhs].
 
-In the context of this recent legislation, this research aims to establish a framework for accurate mental health prediction on a county level, identify significant social, demographic, and behavioral determinants of mental health, and provide insights to state and local officials to aid their efforts in limiting the prevalence of poor mental health days within their communities.
+In the context of this recent legislation, this research aims to establish a framework for accurate mental health prediction on a county level, identify significant social, demographic, and behavioral determinants of mental health, and provide insights to state and local officials to aid their efforts in limiting the prevalence of poor mental health within their communities.
 
 # Data
 
@@ -104,7 +104,7 @@ ols_residual_plot = ols_fitted |>
 # calculate vif
 vif = vif(ols_fit)
 # compile results in table
-vif_table = tibble(variables = names(vif), vif = vif) |> 
+vif_table = tibble(Variables = names(vif), VIF = vif) |> 
   arrange(desc(vif))
 
 ```
@@ -125,7 +125,7 @@ kable(ols_significant, format = 'latex', booktabs = T, caption = "OLS, Statistic
    footnote(general = '* At 0.001 Significance Level')
 ```
 
-Based on these results, there are 23 statistically significant predictors of the average percentage of days people reported feeling mentally unhealthy (at the $\alpha = 0.001$ confidence level). These predictors and coefficient estimates are shown in **Table 2** above. Of these covariates, the strongest positive predictor of poor mental health days is the average percentage of days people from that county reported feeling physically unhealthy. All other things equal, every one-standard-deviation increase in this variable results in an estimated increase in a county's average percentage of poor mental health days of 0.9691171 standard deviations. All other estimated coefficients can be interpreted similarly.
+Based on these results, there are 23 statistically significant predictors of the average percentage of days people reported feeling mentally unhealthy (at the $\alpha = 0.001$ confidence level). These predictors and coefficient estimates are shown in **Table 2** above. Of these covariates, the strongest positive predictor of poor mental health days is the average percentage of days people from that county reported feeling physically unhealthy. All other things equal, every one-standard-deviation increase in this variable results in an estimated increase in a county's average percentage of poor mental health days of 0.9691 standard deviations. All other estimated coefficients can be interpreted similarly.
 
 In addition to a relatively low MSE of `r round(ols_mse, 4)` and a high adjusted R-squared of `r round(adj_r_squared, 4)`, preliminary residual analysis indicates a good model fit. A plot of model residuals against fitted values is shown in **Figure 1** below. Most residuals are between -0.5 and 0.5, and none have an absolute value greater than 2. Considering that our sample includes 2,636 observations, this is an encouraging result that validates our model choice.
 
@@ -260,7 +260,7 @@ kable(lasso_significant, format = 'latex', booktabs = T, caption = "LASSO, Stati
    footnote(general = '* At 0.001 Significance Level')
 ```
 
-The results in **Table 4** only include 45 coefficients, indicating that the LASSO shrunk the coefficients of 15 weakly-relevant covariates to 0. Additionally, only 16 variables were deemed statistically significant predictors of our outcome (at $\alpha = 0.001$), and each of their coefficients is slightly closer to 0 than their corresponding OLS estimate. Unsurprisingly, the average percentage of days spent physically unhealthy remains the clearest predictor of the average percentage of days spent mentally unhealthy. Meanwhile, no ethnicity percentages were deemed statistically significant (OLS had 5). These results, displayed in **Table 5** above, showcase the power of LASSO for shrinkage and variable selection, even in data sets riddled with multicollinearity. Additionally, **Figure 2** provides a visualization of how the strength of these properties varies across different values of $\lambda$.
+The results in **Table 4** only include 45 coefficients, indicating that the LASSO shrunk the coefficients of 15 weakly-relevant covariates to 0. Additionally, only 16 variables were deemed statistically significant predictors of our outcome (at $\alpha = 0.001$), and each of their coefficients is slightly closer to 0 than their corresponding OLS estimate. Unsurprisingly, the average percentage of days physically unhealthy remains the clearest predictor of the average percentage of days mentally unhealthy. Meanwhile, no ethnicity percentages were deemed statistically significant (OLS had 5). These results, displayed in **Table 5** above, showcase the power of LASSO for shrinkage and variable selection, even in data sets riddled with multicollinearity. Additionally, **Figure 2** provides a visualization of how the strength of these properties varies across different values of $\lambda$.
 
 ```{r effects of lasso, fig.height = 4, fig.width = 8, fig.cap = 'LASSO Visualizations', message = F, warning = F}
 grid.arrange(coef_vs_lambda, nonzero_vs_lambda, ncol = 2)
@@ -274,7 +274,7 @@ Despite eliminating 15 variables through shrinkage, the LASSO only increased the
 ols_residual_plot
 ```
 
-Turning our attention to the problem at hand, it is clear that physical health is highly connected to mental health: all else held equal, a one-standard-deviation increase in a county's average percentage of days reported as physically unhealthy results in a 0.9174263 SD increase in its average percentage of days reported as mentally unhealthy. This finding supports the biopsychosocial model of health, which emphasizes the connectivity of biological, social, and psychological wellness [@wustl]. The two next-most significant positive predictors (the percentage of adults who report less than 7 hours of sleep per night and the percentage of adults who suffer food insecurity) also directly support this framework, together indicating that addressing mental health concerns on a county level necessitates investment in both mental health treatment and support for impoverished and overworked communities that enable them to live healthy lives.
+Turning our attention to the problem at hand, it is clear that physical health is very connected to mental health: all else held equal, a one-standard-deviation increase in a county's average percentage of days reported as physically unhealthy results in a 0.9174 SD increase in its average percentage of days reported as mentally unhealthy. This finding supports the biopsychosocial model of health, which emphasizes the connectivity of biological, social, and psychological wellness [@wustl]. The two next-most significant positive predictors (the percentage of adults who report less than 7 hours of sleep per night and the percentage of adults who suffer food insecurity) also directly support this framework, together indicating that addressing mental health concerns on a county level necessitates investment in both mental health treatment and economic support for impoverished and overworked communities that enable them to live healthy lives.
 
 However, the significant negative coefficient associated with the percentage of physically inactive adults is puzzling, as it starkly contrasts the marginal association between these variables. This indicates either the presence of a confounding variable or of continued multicollinearity in the LASSO regression setting. Additionally, the significant positive coefficients associated with median household income and broadband internet access indicate that this study may suffer from biased sampling or self-reporting bias.
 
@@ -288,6 +288,6 @@ lasso_coef_plot
 
 # Conclusions
 
-Though least-squares regression remains an essential econometric method, the interpretation of its coefficients is easily complicated by multicollinearity in higher-dimensional settings. We argue the viability of LASSO regression as a solution to this problem based on its properties, which preserve OLS' inferential and predictive properties while reducing multicollinearity and increasing the interpretability of its coefficients. Finally, we interpret the optimal LASSO coefficients and provide policy recommendations to help state and local government officials address their communities' mental health challenges. Future work includes investigating methods to de-bias LASSO coefficients for inference when the optimal $\lambda$ is large and developing variance inflation factor methodology to quantify the effect of LASSO regression on multicollinearity more accurately.
+Though least-squares regression remains an essential econometric method, the interpretation of its coefficients is easily complicated by multicollinearity in higher-dimensional settings. We argue the viability of LASSO regression as a solution to this problem based on its properties, which preserve OLS's inferential and predictive properties while performing variable selection, reducing multicollinearity, and increasing the interpretability of its coefficients. Finally, we interpret the optimal LASSO coefficients and provide policy recommendations to help state and local government officials address their communities' mental health challenges. Future work could include investigating methods to de-bias LASSO coefficients for inference when the optimal $\lambda$ is large and developing variance inflation factor methodology to quantify the effect of LASSO regression on multicollinearity more accurately.
 
 # References
