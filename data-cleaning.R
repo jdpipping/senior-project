@@ -5,8 +5,8 @@ library(tidyverse)
 data <- read_csv('2023-county-data.csv')
 additional_data <- read_csv('2023-additional-data.csv')
 
-# create county-level dataset
-county_data <- data |> 
+# combine datasets
+combined_data <- data |> 
   # join datasets
   left_join(additional_data, by = c('FIPS')) |> 
   # make fips code numeric
@@ -15,7 +15,7 @@ county_data <- data |>
   filter(FIPS %% 1000 != 0)
 
 # create final dataset
-final_data <- county_data |> 
+final_data <- combined_data |> 
   # select desired columns
   reframe(
     # omit columns with high missingness
@@ -24,21 +24,21 @@ final_data <- county_data |>
     county = County.x,
     # ypll_rate = `Years of Potential Life Lost Rate`,
     perc_fair_or_poor_health = `% Fair or Poor Health`,
-    avg_days_physically_unhealthy = `Average Number of Physically Unhealthy Days`,
-    avg_days_mentally_unhealthy = `Average Number of Mentally Unhealthy Days`,
+    perc_days_physically_unhealthy = `Average Number of Physically Unhealthy Days` / 30 * 100,
+    perc_days_mentally_unhealthy = `Average Number of Mentally Unhealthy Days` / 30 * 100,
     perc_low_birthweight = `% Low Birthweight`,
     perc_adults_smoking = `% Adults Reporting Currently Smoking`,
-    perc_adults_obseity = `% Adults with Obesity`,
+    perc_adults_obesity = `% Adults with Obesity`,
     food_environment_index = `Food Environment Index`,
     perc_physically_inactive = `% Physically Inactive`,
     perc_with_exercise_opportunities = `% With Access to Exercise Opportunities`,
     perc_excessive_drinking = `% Excessive Drinking`,
     perc_driving_deaths_alcohol = `% Driving Deaths with Alcohol Involvement`,
-    chlamydia_rate = `Chlamydia Rate`,
+    # chlamydia_rate = `Chlamydia Rate`,
     # teen_birth_rate = `Teen Birth Rate`,
     perc_uninsured = `% Uninsured`,
     primary_care_physicians_ratio = 1 / as.numeric(substr(`Primary Care Physicians Ratio`, 1, nchar(`Primary Care Physicians Ratio`) - 2)),
-    dentist_ratio = 1 / as.numeric(substr(`Dentist Ratio`, 1, nchar(`Dentist Ratio`) - 2)),
+    # dentist_ratio = 1 / as.numeric(substr(`Dentist Ratio`, 1, nchar(`Dentist Ratio`) - 2)),
     mental_health_provider_ratio = 1 / as.numeric(substr(`Mental Health Provider Ratio`, 1, nchar(`Mental Health Provider Ratio`) - 2)),
     preventable_hospitalization_rate = `Preventable Hospitalization Rate`,
     perc_annual_mammagram = `% with Annual Mammogram`,
@@ -50,7 +50,7 @@ final_data <- county_data |>
     income_ratio_20_80 = 1 / `Income Ratio`,
     perc_children_single_parent = `% Children in Single-Parent Households`,
     social_association_rate = `Social Association Rate`,
-    injury_death_rate = `Injury Death Rate`,
+    # injury_death_rate = `Injury Death Rate`,
     avg_daily_pm = `Average Daily PM2.5`,
     water_violation = as.numeric(`Presence of Water Violation` == 'Yes'),
     perc_severe_housing_problems = `% Severe Housing Problems`,
@@ -85,7 +85,7 @@ final_data <- county_data |>
     # perc_enrolled_free_reduced_lunch = `% Enrolled in Free or Reduced Lunch`,
     # residential_segregation_index = `Segregation Index...168`,
     perc_income_required_child_care = `% Household Income Required for Child Care Expenses`,
-    child_care_center_rate = `Child Care Centers per 1,000 Children`,
+    # child_care_center_rate = `Child Care Centers per 1,000 Children`,
     # homicide_rate = `Homicide Rate`,
     # age_adjusted_suicide_rate = `Suicide Rate (Age-Adjusted)`,
     # firearm_fatality_rate = `Firearm Fatalities Rate`,
@@ -93,7 +93,7 @@ final_data <- county_data |>
     # juvenile_arrest_rate = `Juvenile Arrest Rate`,
     perc_voter_turnout = `% Voter Turnout`,
     perc_census_participation = `% Census Participation`,
-    traffic_volume = `Traffic Volume`,
+    # traffic_volume = `Traffic Volume`,
     perc_homeowners = `% Homeowners`,
     perc_households_severe_cost_burden = `% Households with Severe Cost Burden`,
     perc_households_broadband_access = `% Households with Broadband Access`,
