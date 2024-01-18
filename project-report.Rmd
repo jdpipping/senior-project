@@ -40,7 +40,7 @@ In the context of this recent legislation, this research aims to establish a fra
 
 The data for this project was obtained from the University of Wisconsin's 2023 County Health Rankings data set, which is publicly available on the Harvard Dataverse [@usclhr]. Consisting of publicly-recorded measures and self-reported survey results, this data set includes over 70 county-level metrics such as life expectancy, median household income, and the percentage of people uninsured. All metrics are accompanied by 95% confidence intervals and associated ranks, but this project's scope relies only on point estimates.
 
-The data was subsequently cleaned and prepared for analysis. This process involved the omission of metrics flagged as "highly unreliable" by the University of Wisconsin's research team. Additionally, metrics with high (>10%) missingness were omitted to preserve a high number of complete cases for regression. After cleaning, the final data set comprised 61 metrics from 2,636 US counties. These metrics included counties' average percentage of days people reported feeling mentally unhealthy (the outcome of interest) and 60 covariates.
+The data was subsequently cleaned and prepared for analysis. This process involved the omission of metrics flagged as "highly unreliable" by the University of Wisconsin's research team. Additionally, metrics with high (>10%) missingness were omitted to preserve a high number of complete cases for regression. After cleaning, the final data set comprised 61 metrics from 2,636 US counties. These metrics included the average percentage of days people in each county reported feeling mentally unhealthy (the outcome of interest) and 60 covariates.
 
 # Methods and Results
 
